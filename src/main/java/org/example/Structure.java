@@ -12,7 +12,7 @@ public class Structure {
     }
     public static String products(int id, int sellerId, String title, String description, int price, int stock){
         String result = "\t\"id\" : "+id+"\n"+
-                "\t\"sellerId\" : "+sellerId+"\n"+
+                "\t\"seller\" : "+sellerId+"\n"+
                 "\t\"title\" : "+title+"\n"+
                 "\t\"description\" : "+description+"\n"+
                 "\t\"price\" : "+price+"\n"+
@@ -38,7 +38,7 @@ public class Structure {
                 "\t\"is_paid\" : "+is_paid+"\n";
         return result;
     }
-    public static String orders_details(int id, int productId, int quantity, int price){
+    public static String order_details(int id, int productId, int quantity, int price){
         String result = "\t\"id\" : "+id+"\n"+
                 "\t\"product\" : "+productId+"\n"+
                 "\t\"quantity\" : "+quantity+"\n"+

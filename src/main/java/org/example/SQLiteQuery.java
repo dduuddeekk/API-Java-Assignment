@@ -117,6 +117,17 @@ public class SQLiteQuery {
             ResultSet resultSet = statement.executeQuery(sql);
 
             if(table.equals("users")){
+                result.add(Structure.users(resultSet.getInt("userId"), resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("email"), resultSet.getString("phone_number"), resultSet.getString("type")));
+            } else if (table.equals("products")){
+                result.add(Structure.products(resultSet.getInt("productId"), resultSet.getInt("sellerId"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getInt("price"), resultSet.getInt("stock")));
+            } else if (table.equals("addresses")){
+                result.add(Structure.addresses(resultSet.getInt("userId"), resultSet.getString("type"), resultSet.getString("line1"), resultSet.getString("line1"), resultSet.getString("city"), resultSet.getString("province"), resultSet.getString("postcode")));
+            } else if (table.equals("orders")){
+                result.add(Structure.orders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid")));
+            } else if (table.equals("order_details")){
+                result.add(Structure.order_details(resultSet.getInt("orderId"), resultSet.getInt("productId"), resultSet.getInt("quantity"), resultSet.getInt("price")));
+            } else if (table.equals("reviews")){
+                result.add(Structure.reviews(resultSet.getInt("orderId"), resultSet.getInt("star"), resultSet.getString("description")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
