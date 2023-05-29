@@ -4,6 +4,9 @@ import java.io.OutputStream;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.io.IOException;
 public class Handler {
     public static class handler implements HttpHandler {
@@ -29,4 +32,21 @@ public class Handler {
             }
         }
     }
+}
+
+class Users{
+    private int userId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private String type;
+}
+class Products{
+    private int id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private String type;
 }
