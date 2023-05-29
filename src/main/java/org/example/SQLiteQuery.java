@@ -109,7 +109,7 @@ public class SQLiteQuery {
         }
     }
     public void selectAll(String table){
-        String sql = "SELECT * FROM " + table;
+        String sql = "SELECT * FROM " + table + ";";
         ArrayList<String> result = new ArrayList<String>();
         try {
             Connection connection = this.connect();
