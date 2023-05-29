@@ -1,6 +1,8 @@
 package org.example;
 
 import java.sql.*;
+import java.sql.SQLException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SQLiteQuery {
@@ -108,7 +110,18 @@ public class SQLiteQuery {
             System.out.println(e.getMessage());
         }
     }
-    public void selectAll(String table){
+
+    public String appendString(ArrayList<String> json){
+        StringBuffer group = new StringBuffer();
+        for (String s : json){
+            group.append(s);
+            group.append("\n\n");
+        }
+        String result = group.toString();
+        return result;
+    }
+
+    public String selectAll(String table){
         String sql = "SELECT * FROM " + table + ";";
         ArrayList<String> result = new ArrayList<String>();
         try {
@@ -117,20 +130,107 @@ public class SQLiteQuery {
             ResultSet resultSet = statement.executeQuery(sql);
 
             if(table.equals("users")){
-                result.add(Structure.users(resultSet.getInt("userId"), resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("email"), resultSet.getString("phone_number"), resultSet.getString("type")));
+                while(resultSet.next()) {
+                    result.add(Structure.users(resultSet.getInt("userId"), resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("email"), resultSet.getString("phone_number"), resultSet.getString("type")));
+                }
             } else if (table.equals("products")){
-                result.add(Structure.products(resultSet.getInt("productId"), resultSet.getInt("sellerId"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getInt("price"), resultSet.getInt("stock")));
-            } else if (table.equals("addresses")){
-                result.add(Structure.addresses(resultSet.getInt("userId"), resultSet.getString("type"), resultSet.getString("line1"), resultSet.getString("line1"), resultSet.getString("city"), resultSet.getString("province"), resultSet.getString("postcode")));
+                while(resultSet.next()) {
+                    result.add(Structure.products(resultSet.getInt("productId"), resultSet.getInt("sellerId"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getInt("price"), resultSet.getInt("stock")));
+                }
+            } else if (table.equals("addresses")) {
+                while (resultSet.next()){
+                    result.add(Structure.addresses(resultSet.getInt("userId"), resultSet.getString("type"), resultSet.getString("line1"), resultSet.getString("line1"), resultSet.getString("city"), resultSet.getString("province"), resultSet.getString("postcode")));
+                }
             } else if (table.equals("orders")){
-                result.add(Structure.orders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid")));
+                while (resultSet.next()) {
+                    result.add(Structure.orders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid")));
+                }
             } else if (table.equals("order_details")){
-                result.add(Structure.order_details(resultSet.getInt("orderId"), resultSet.getInt("productId"), resultSet.getInt("quantity"), resultSet.getInt("price")));
+                while (resultSet.next()) {
+                    result.add(Structure.order_details(resultSet.getInt("orderId"), resultSet.getInt("productId"), resultSet.getInt("quantity"), resultSet.getInt("price")));
+                }
             } else if (table.equals("reviews")){
-                result.add(Structure.reviews(resultSet.getInt("orderId"), resultSet.getInt("star"), resultSet.getString("description")));
+                while (resultSet.next()) {
+                    result.add(Structure.reviews(resultSet.getInt("orderId"), resultSet.getInt("star"), resultSet.getString("description")));
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        String jsonSend = "{\n"+appendString(result)+"\n}";
+        return jsonSend;
+    }
+
+    public String selectId(String table, String id){
+        String sql = "SELECT * FROM "+table+" WHERE id = "+id+";";
+        ArrayList<String> result = new ArrayList<String>();
+        try{
+            Connection connection = this.connect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            if(table.equals("users")){
+                while(resultSet.next()) {
+                    result.add(Structure.users(resultSet.getInt("userId"), resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("email"), resultSet.getString("phone_number"), resultSet.getString("type")));
+                }
+            } else if (table.equals("products")){
+                while(resultSet.next()) {
+                    result.add(Structure.products(resultSet.getInt("productId"), resultSet.getInt("sellerId"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getInt("price"), resultSet.getInt("stock")));
+                }
+            } else if (table.equals("orders")){
+                while (resultSet.next()) {
+                    result.add(Structure.orders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid")));
+                }
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        String jsonSend = "{\n"+appendString(result)+"\n}";
+        return jsonSend;
+    }
+
+    public String selectOrdersId(String table, String id){
+        String sql = "SELECT * FROM "+table+" WHERE orderId = "+id+";";
+        ArrayList<String> result = new ArrayList<String>();
+        try {
+            Connection connection = this.connect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            if (table.equals("orders")){
+                while (resultSet.next()) {
+                    result.add(Structure.orders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid")));
+                }
+            } else if (table.equals("reviews")){
+                while (resultSet.next()) {
+                    result.add(Structure.reviews(resultSet.getInt("orderId"), resultSet.getInt("star"), resultSet.getString("description")));
+                }
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        String jsonSend = "{\n"+appendString(result)+"\n}";
+        return jsonSend;
+    }
+
+    public String selectIdUsers(String table, String id){
+        String sql = "SELECT * FROM "+table+" WHERE userId = "+id+";";
+        ArrayList<String> result = new ArrayList<String>();
+
+        try {
+            Connection connection = this.connect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            if (table.equals("addresses")) {
+                while (resultSet.next()){
+                    result.add(Structure.addresses(resultSet.getInt("userId"), resultSet.getString("type"), resultSet.getString("line1"), resultSet.getString("line1"), resultSet.getString("city"), resultSet.getString("province"), resultSet.getString("postcode")));
+                }
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        String jsonSend = "{\n"+appendString(result)+"\n}";
+        return jsonSend;
     }
 }
