@@ -1,11 +1,7 @@
 package org.example;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class SQLiteQuery {
     private Connection connect(){
@@ -108,6 +104,20 @@ public class SQLiteQuery {
             pstmt.setInt(3, quantity );
             pstmt.setInt(4, price );
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void selectAll(String table){
+        String sql = "SELECT * FROM " + table;
+        ArrayList<String> result = new ArrayList<String>();
+        try {
+            Connection connection = this.connect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            if(table.equals("users")){
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
