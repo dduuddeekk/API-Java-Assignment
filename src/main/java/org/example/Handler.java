@@ -42,7 +42,7 @@ public class Handler {
 //                mainOut.close();
 //                System.exit(0);
 //            }else {
-            if(dotenv.get("main-api-key").equals(exchange.getRequestHeaders().get("main-api-key").get(0))) {
+            if(dotenv.get("API_KEY").equals(exchange.getRequestHeaders().get("x-api-key").get(0))) {
                 if ("GET".equals(exchange.getRequestMethod())) {
                     OutputStream outputStream = exchange.getResponseBody();
                     SQLiteQuery tableValue = new SQLiteQuery();
