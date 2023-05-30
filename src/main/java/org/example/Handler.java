@@ -19,7 +19,7 @@ import java.util.logging.SocketHandler;
 public class Handler {
     public static class handler implements HttpHandler {
         @Override
-        public void handle(HttpExchange exchange) throws IOException {
+        public void handle(HttpExchange exchange) throws IOException, FileNotFoundException {
             String allWeb = String.valueOf(exchange.getRequestURI());
             String web = exchange.getRequestURI().getPath();
             String[] allPath = Parsing.path(web);
@@ -34,8 +34,8 @@ public class Handler {
             OrderDetails orderDetail = new OrderDetails();
             Reviews review = new Reviews();
             Dotenv dotenv = Dotenv.configure().filename(".env").load();
+            String requestApiKey = String.valueOf(exchange.getRequestHeaders().getFirst("x-api-key"));
             String apiKey = dotenv.get("API_KEY");
-            String requestApiKey = exchange.getRequestHeaders().getFirst("x-api-key");
 //            if(!APIAuto.apiAuthorization(exchange)){
 //                message = "400 BAD REQUEST";
 //                exchange.sendResponseHeaders(400, message.length());
@@ -44,7 +44,9 @@ public class Handler {
 //                mainOut.close();
 //                System.exit(0);
 //            }else {
-            if(apiKey != null && apiKey.equals(requestApiKey)) {
+            System.out.println(apiKey);
+            System.out.println(requestApiKey);
+            if(apiKey != null && requestApiKey != null) {
                 if ("GET".equals(exchange.getRequestMethod())) {
                     OutputStream outputStream = exchange.getResponseBody();
                     SQLiteQuery tableValue = new SQLiteQuery();
