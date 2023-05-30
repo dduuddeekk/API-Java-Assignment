@@ -346,4 +346,117 @@ public class SQLiteQuery {
             System.out.println(e.getMessage());
         }
     }
+
+   public void deleteColumn(String table, String id, String rowId){
+        String sql = "DELETE FROM "+table+" WHERE "+id+" = "+rowId;
+        try{
+            Connection connection = this.connect();
+            Statement statement = connection.createStatement();
+            statement.execute(sql);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+   }
+
+   public String allCondition(String table, String id, String cond1, String cond2, String cond3){
+        String sql = "";
+        String[] condition1 = Parsing.conditionFilter(cond1);
+        String[] condition2 = Parsing.conditionFilter(cond2);
+        String[] condition3 = Parsing.conditionFilter(cond3);
+        ArrayList<String> result = new ArrayList<String>();
+
+       if (condition2[1].equals("largerEqual")){
+           sql = "SELECT * FROM "+table+ " WHERE "+ condition1[0] +" = \""+ condition1[1] + "\" AND " + id + " >= " + condition3[1] + ";";
+       } else if (condition2[1].equals("larger")) {
+           sql = "SELECT * FROM "+table+ " WHERE "+ condition1[0] +" = \""+ condition1[1] + "\" AND " + id + " > " + condition3[1] + ";";
+       } else if (condition2[1].equals("smaller")) {
+           sql = "SELECT * FROM "+table+ " WHERE "+ condition1[0] +" = \""+ condition1[1] + "\" AND " + id + " < " + condition3[1] + ";";
+       } else if (condition2[1].equals("smallerEqual")) {
+           sql = "SELECT * FROM "+table+ " WHERE "+ condition1[0] +" = \""+ condition1[1] + "\" AND " + id + " <= " + condition3[1] + ";";
+       } else if (condition2[1].equals("equal")) {
+           sql = "SELECT * FROM "+table+ " WHERE "+ condition1[0] +" = \""+ condition1[1] + "\" AND " + id + " = " + condition3[1] + ";";
+       } else {
+           result.add("Filter wrong");
+       }
+
+       try{
+           Connection connection = this.connect();
+           Statement statement = connection.createStatement();
+           ResultSet resultSet = statement.executeQuery(sql);
+
+           if(table.equals("users")){
+               while(resultSet.next()) {
+                   result.add(Structure.users(resultSet.getInt("userId"), resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("email"), resultSet.getString("phone_number"), resultSet.getString("type")));
+               }
+           } else if (table.equals("products")){
+               while(resultSet.next()) {
+                   result.add(Structure.products(resultSet.getInt("productId"), resultSet.getInt("sellerId"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getInt("price"), resultSet.getInt("stock")));
+               }
+           } else if (table.equals("addresses")) {
+               while (resultSet.next()){
+                   result.add(Structure.addresses(resultSet.getInt("userId"), resultSet.getString("type"), resultSet.getString("line1"), resultSet.getString("line1"), resultSet.getString("city"), resultSet.getString("province"), resultSet.getString("postcode")));
+               }
+           } else if (table.equals("orders")){
+               while (resultSet.next()) {
+                   result.add(Structure.orders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid")));
+               }
+           } else if (table.equals("order_details")){
+               while (resultSet.next()) {
+                   result.add(Structure.order_details(resultSet.getInt("orderId"), resultSet.getInt("productId"), resultSet.getInt("quantity"), resultSet.getInt("price")));
+               }
+           } else if (table.equals("reviews")){
+               while (resultSet.next()) {
+                   result.add(Structure.reviews(resultSet.getInt("orderId"), resultSet.getInt("star"), resultSet.getString("description")));
+               }
+           }
+       }catch (SQLException e){
+           System.out.println(e.getMessage());
+       }
+
+       String jsonSend = "{\n"+appendString(result)+"\n}";
+       return jsonSend;
+    }
+
+    public String oneCondition(String table, String id, String cond1){
+        String[] condition1 = Parsing.conditionFilter(cond1);
+        ArrayList<String> result = new ArrayList<String>();
+        String sql = "SELECT * FROM "+table+" WHERE "+condition1[0]+" = \""+condition1[1]+"\";";
+
+        try{
+            Connection connection = this.connect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            if(table.equals("users")){
+                while(resultSet.next()) {
+                    result.add(Structure.users(resultSet.getInt("userId"), resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("email"), resultSet.getString("phone_number"), resultSet.getString("type")));
+                }
+            } else if (table.equals("products")){
+                while(resultSet.next()) {
+                    result.add(Structure.products(resultSet.getInt("productId"), resultSet.getInt("sellerId"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getInt("price"), resultSet.getInt("stock")));
+                }
+            } else if (table.equals("addresses")) {
+                while (resultSet.next()){
+                    result.add(Structure.addresses(resultSet.getInt("userId"), resultSet.getString("type"), resultSet.getString("line1"), resultSet.getString("line1"), resultSet.getString("city"), resultSet.getString("province"), resultSet.getString("postcode")));
+                }
+            } else if (table.equals("orders")){
+                while (resultSet.next()) {
+                    result.add(Structure.orders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid")));
+                }
+            } else if (table.equals("order_details")){
+                while (resultSet.next()) {
+                    result.add(Structure.order_details(resultSet.getInt("orderId"), resultSet.getInt("productId"), resultSet.getInt("quantity"), resultSet.getInt("price")));
+                }
+            } else if (table.equals("reviews")){
+                while (resultSet.next()) {
+                    result.add(Structure.reviews(resultSet.getInt("orderId"), resultSet.getInt("star"), resultSet.getString("description")));
+                }
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        String jsonSend = "{\n"+appendString(result)+"\n}";
+        return jsonSend;
+    }
 }

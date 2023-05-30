@@ -90,10 +90,10 @@ class Users{
         SQLiteQuery inputDatabase = new SQLiteQuery();
         inputDatabase.inputUsers(id, firstName, lastName, email, phoneNumber, type);
     }
-//    public void update(String newId){
-//        SQLiteQuery updateDatabase = new SQLiteQuery();
-//        updateDatabase.updateUsers(id, firstName, lastName, email, phoneNumber, type);
-//    }
+    public void update(String newId){
+        SQLiteQuery updateDatabase = new SQLiteQuery();
+        updateDatabase.updateUser(id, firstName, lastName, email, phoneNumber, type, newId);
+    }
 }
 class Products{
     private int id;
@@ -148,6 +148,11 @@ class Products{
     public void insert(){
         SQLiteQuery inputDatabase = new SQLiteQuery();
         inputDatabase.inputProducts(id, sellerId, title, description, price, stock);
+    }
+
+    public void update(String newId){
+        SQLiteQuery updateDatabase = new SQLiteQuery();
+        updateDatabase.updateProducts(id, sellerId, title, description, price, stock, newId);
     }
 }
 
@@ -211,6 +216,11 @@ class Addresses{
         SQLiteQuery inputDatabase = new SQLiteQuery();
         inputDatabase.inputAddresses(userId, type, lineOne, lineTwo, city, province, postcode);
     }
+
+    public void update(String newId){
+        SQLiteQuery updateDatabase = new SQLiteQuery();
+        updateDatabase.updateAddresses(userId, type, lineOne, lineTwo, city, province, postcode, newId);
+    }
 }
 class Orders{
     private int id;
@@ -266,6 +276,11 @@ class Orders{
         SQLiteQuery inputDatabase = new SQLiteQuery();
         inputDatabase.inputOrders(id, buyerId, note, total, discount, is_paid);
     }
+
+    public void update(String newId){
+        SQLiteQuery updateDatabase = new SQLiteQuery();
+        updateDatabase.updateOrders(id, buyerId, note, total, discount, is_paid, newId);
+    }
 }
 class OrderDetails{
     private int orderId;
@@ -298,9 +313,15 @@ class OrderDetails{
         }
         return 0;
     }
+
     public void insert(){
         SQLiteQuery inputDatabase = new SQLiteQuery();
         inputDatabase.inputOrderDetails(orderId, productId, quantity, price);
+    }
+
+    public void update(String newId){
+        SQLiteQuery updateDatabase = new SQLiteQuery();
+        updateDatabase.updateOrderDetails(orderId, productId, quantity, price, newId);
     }
 }
 class Reviews{
@@ -332,5 +353,10 @@ class Reviews{
     public void insert(){
         SQLiteQuery inputDatabase = new SQLiteQuery();
         inputDatabase.inputReviews(orderId, star, description);
+    }
+
+    public void update(String newId){
+        SQLiteQuery updateDatabase = new SQLiteQuery();
+        updateDatabase.updateReviews(orderId, star, description, newId);
     }
 }
