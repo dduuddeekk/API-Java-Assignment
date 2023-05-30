@@ -14,11 +14,133 @@ public class Handler {
     public static class handler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            OutputStream outputStream = exchange.getResponseBody();
+            String allWeb = String.valueOf(exchange.getRequestURI());
+            String web = exchange.getRequestURI().getPath();
+            String[] allPath = Parsing.path(web);
+            String path = allPath[1];
             String message = "";
+            System.out.println(exchange.getRequestMethod());
 
             if ("GET".equals(exchange.getRequestMethod())) {
-                //DI SINI GET!
+                OutputStream outputStream = exchange.getResponseBody();
+                SQLiteQuery tableValue = new SQLiteQuery();
+                if(Parsing.filterCheck(allWeb) == 1){
+                    String allQuery = exchange.getRequestURI().getQuery();
+                    String[] query = Parsing.filter(allQuery);
+                    if(query.length == 3){
+                        if(path.equals("users")){
+                            message = tableValue.allCondition(path, "userId", query[0], query[1], query[2]);
+                        } else if(path.equals("produts")){
+                            message = tableValue.allCondition(path, "productId", query[0], query[1], query[2]);
+                        } else if(path.equals("orders")){
+                            message = tableValue.allCondition(path, "orderId", query[0], query[1], query[2]);
+                        } else if(path.equals("addresses")){
+                            message = tableValue.allCondition(path, "userId", query[0], query[1], query[2]);
+                        } else if(path.equals("order_details")){
+                            message = tableValue.allCondition(path, "orderId", query[0], query[1], query[2]);
+                        } else if(path.equals("reviews")){
+                            message = tableValue.allCondition(path, "orderId", query[0], query[1], query[2]);
+                        } else{
+                            message = "Table Not Found";
+                            exchange.sendResponseHeaders(404, message.length());
+                            outputStream.write(message.getBytes());
+                            outputStream.flush();
+                            outputStream.close();
+                        }
+                    }else if(query.length == 1){
+                        if(path.equals("users")){
+                            message = tableValue.oneCondition(path, "userId", query[0]);
+                        } else if(path.equals("produts")){
+                            message = tableValue.oneCondition(path, "productId", query[0]);
+                        } else if(path.equals("orders")){
+                            message = tableValue.oneCondition(path, "orderId", query[0]);
+                        } else if(path.equals("addresses")){
+                            message = tableValue.oneCondition(path, "userId", query[0]);
+                        } else if(path.equals("order_details")){
+                            message = tableValue.oneCondition(path, "orderId", query[0]);
+                        } else if(path.equals("reviews")){
+                            message = tableValue.oneCondition(path, "orderId", query[0]);
+                        } else{
+                            message = "Table Not Found";
+                            exchange.sendResponseHeaders(404, message.length());
+                            outputStream.write(message.getBytes());
+                            outputStream.flush();
+                            outputStream.close();
+                        }
+                    } else{
+                        message = "Path Not Found";
+                        exchange.sendResponseHeaders(404, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                    exchange.sendResponseHeaders(200, message.length());
+                    outputStream.write(message.getBytes());
+                    outputStream.flush();
+                    outputStream.close();
+                } else{
+                    if(path.equals("users")){
+                        if(allPath.length == 2){
+                            message = tableValue.selectAll(path);
+                        }else if(allPath.length == 3){
+                            message = tableValue.selectId(path, allPath[2]);
+                        }else if(allPath.length == 4){
+                            message = tableValue.selectTableUser(allPath[2], allPath[3]);
+                        }else{
+                            message = "Path Not Found";
+                            exchange.sendResponseHeaders(404, message.length());
+                            outputStream.write(message.getBytes());
+                            outputStream.flush();
+                            outputStream.close();
+                        }
+                    } else if(path.equals("products")){
+                        if(allPath.length == 2){
+                            message = tableValue.selectAll(path);
+                        }else if(allPath.length == 3){
+                            message = tableValue.selectId(path, allPath[2]);
+                        }else{
+                            message = "Path Not Found";
+                            exchange.sendResponseHeaders(404, message.length());
+                            outputStream.write(message.getBytes());
+                            outputStream.flush();
+                            outputStream.close();
+                        }
+                    } else if(path.equals("orders") || path.equals("reviews") || path.equals("order_details")){
+                        if(allPath.length == 2){
+                            message = tableValue.selectAll(path);
+                        }else if(allPath.length == 3){
+                            message = tableValue.selectOrdersId(path, allPath[2]);
+                        }else{
+                            message = "Path Not Found";
+                            exchange.sendResponseHeaders(404, message.length());
+                            outputStream.write(message.getBytes());
+                            outputStream.flush();
+                            outputStream.close();
+                        }
+                    } else if(path.equals("addresses")){
+                        if(allPath.length == 2){
+                            message = tableValue.selectAll(path);
+                        }else if(allPath.length == 3){
+                            message = tableValue.selectIdUsers(path, allPath[2]);
+                        }else{
+                            message = "Path Not Found";
+                            exchange.sendResponseHeaders(404, message.length());
+                            outputStream.write(message.getBytes());
+                            outputStream.flush();
+                            outputStream.close();
+                        }
+                    } else{
+                        message = "Table Not Found";
+                        exchange.sendResponseHeaders(404, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                    exchange.sendResponseHeaders(200, message.length());
+                    outputStream.write(message.getBytes());
+                    outputStream.flush();
+                    outputStream.close();
+                }
             } else if ("POST".equals(exchange.getRequestMethod())){
                 //DI SINI POST!
             } else if ("PUT".equals(exchange.getRequestMethod())){
@@ -28,9 +150,9 @@ public class Handler {
             } else {
                 message = "Method not found.";
                 exchange.sendResponseHeaders(404, message.length());
-                outputStream.write(message.getBytes());
-                outputStream.flush();
-                outputStream.close();
+//                outputStream.write(message.getBytes());
+//                outputStream.flush();
+//                outputStream.close();
             }
         }
     }
