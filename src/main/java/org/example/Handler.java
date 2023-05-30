@@ -4,6 +4,10 @@ import java.io.*;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import io.github.cdimascio.dotenv.Dotenv;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import org.json.JSONObject;
 
 import java.sql.Connection;
@@ -29,16 +33,16 @@ public class Handler {
             Orders order = new Orders();
             OrderDetails orderDetail = new OrderDetails();
             Reviews review = new Reviews();
-            if(!APIAuto.apiAuthorization(exchange)){
-                message = "400 BAD REQUEST";
-                exchange.sendResponseHeaders(400, message.length());
-                mainOut.write(message.getBytes());
-                mainOut.flush();
-                mainOut.close();
-                System.exit(0);
-            }else {
-
-
+            Dotenv dotenv = Dotenv.configure().filename(".env").load();
+//            if(!APIAuto.apiAuthorization(exchange)){
+//                message = "400 BAD REQUEST";
+//                exchange.sendResponseHeaders(400, message.length());
+//                mainOut.write(message.getBytes());
+//                mainOut.flush();
+//                mainOut.close();
+//                System.exit(0);
+//            }else {
+            if(dotenv.get("main-api-key").equals(exchange.getRequestHeaders().get("main-api-key").get(0))) {
                 if ("GET".equals(exchange.getRequestMethod())) {
                     OutputStream outputStream = exchange.getResponseBody();
                     SQLiteQuery tableValue = new SQLiteQuery();
@@ -402,6 +406,12 @@ public class Handler {
                     mainOut.flush();
                     mainOut.close();
                 }
+            }else{
+                message = "400 BAD REQUEST";
+                exchange.sendResponseHeaders(400, message.length());
+                mainOut.write(message.getBytes());
+                mainOut.flush();
+                mainOut.close();
             }
         }
     }
