@@ -260,6 +260,15 @@ public class SQLiteQuery {
                 order.setOrders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid"));
 
                 jsonSend = selectOrdersId(tableOne, String.valueOf(order.getId()));
+            }else if (tableOne.equals("order_details")){
+                String sQLFind = "SELECT * FROM orders WHERE buyerId = "+id;
+                Connection connection1 = this.connect();
+                Statement statement1 = connection1.createStatement();
+                ResultSet resultSet1 = statement1.executeQuery(sQLFind);
+                Orders order = new Orders();
+                order.setOrders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid"));
+
+                jsonSend = selectOrdersId(tableOne, String.valueOf(order.getId()));
             }
         }catch (SQLException e){
             System.out.println(e.getMessage());
