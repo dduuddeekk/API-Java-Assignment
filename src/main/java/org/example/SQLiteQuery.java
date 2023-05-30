@@ -288,9 +288,56 @@ public class SQLiteQuery {
         }
     }
 
-    public void updateProducts(int id, String firstName, String lastName, String email, String phoneNumber, String type, String newId){
-        String sql = "UPDATE users SET userId = "+id+", first_name = \""+firstName+"\", last_name = \""+lastName+"\", email = \""+email+"\", phone_number = \""+phoneNumber+
-                "\", type = \""+type+"\", WHERE userId = "+newId+";";
+    public void updateProducts(int id, int sellerId, String title, String description, int price, int stock, String newId){
+        String sql = "UPDATE users SET productId = "+id+", sellerId = "+sellerId+", title = \""+title+"\", description = \""+description+"\", price = "+price+
+                ", stock = "+stock+", WHERE productId = "+newId+";";
+        try{
+            Connection connection = this.connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateOrders(int id, int buyerId, String note, int total, int discount, String is_paid, String newId){
+        String sql = "UPDATE users SET orderId = "+id+", buyerId = "+buyerId+", note = \""+note+"\", total = "+total+", discount = "+discount+
+                ", WHERE orderId = "+newId+";";
+        try{
+            Connection connection = this.connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateAddresses(int userId, String type, String lineOne, String lineTwo, String city, String province, String postcode, String newId){
+        String sql = "UPDATE users SET userId = "+userId+", type = \""+type+"\", line1 = \""+lineOne+"\", line2 = \""+lineTwo+"\", city = \""+city+
+                "\", province = \""+province+"\", postcode = \""+postcode+"\" WHERE orderId = "+newId+";";
+        try{
+            Connection connection = this.connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public void updateOrderDetails(int orderId, int productId, int quantity, int price, String newId){
+        String sql = "UPDATE users SET orderId = "+orderId+", productId = "+productId+", quantity = "+quantity+", price = "+price+
+                " WHERE orderId = "+newId+";";
+        try{
+            Connection connection = this.connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateReviews(int orderId, int star, String description, String newId){
+        String sql = "UPDATE users SET orderId = "+orderId+", star = "+star+", description = \""+description+
+                "\" WHERE orderId = "+newId+";";
         try{
             Connection connection = this.connect();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
