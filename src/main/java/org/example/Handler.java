@@ -1,6 +1,7 @@
 package org.example;
 
-import java.io.OutputStream;
+import java.io.*;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.json.JSONObject;
@@ -9,7 +10,6 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.io.IOException;
 import java.util.logging.SocketHandler;
 
 public class Handler {
@@ -23,6 +23,12 @@ public class Handler {
             String message = "";
             System.out.println(exchange.getRequestMethod());
             OutputStream mainOut = exchange.getResponseBody();
+            Users user = new Users();
+            Products product = new Products();
+            Addresses address = new Addresses();
+            Orders order = new Orders();
+            OrderDetails orderDetail = new OrderDetails();
+            Reviews review = new Reviews();
 
             if ("GET".equals(exchange.getRequestMethod())) {
                 OutputStream outputStream = exchange.getResponseBody();
@@ -145,9 +151,219 @@ public class Handler {
                     outputStream.close();
                 }
             } else if ("POST".equals(exchange.getRequestMethod())){
-                //DI SINI POST!
+                OutputStream outputStream = exchange.getResponseBody();
+                BufferedReader readers = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), "utf-8"));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = readers.readLine()) != null) {
+                    buffer.append(line);
+                }
+                readers.close();
+                String json = buffer.toString();
+                if(path.equals("users")){
+                    if(user.parsingJson(json) != 1){
+                        user.insert();
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("products")){
+                    if(product.parsingJson(json) != 1){
+                        product.insert();
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("orders")){
+                    if(order.parsingJson(json) != 1){
+                        order.insert();
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("order_details")){
+                    if(orderDetail.parsingJson(json) != 1){
+                        orderDetail.insert();
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("addresses")){
+                    if(address.parsingJson(json) != 1){
+                        address.insert();
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("reviews")){
+                    if(review.parsingJson(json) != 1){
+                        review.insert();
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else {
+                    message = "400 BAD REQUEST";
+                    exchange.sendResponseHeaders(400, message.length());
+                    outputStream.write(message.getBytes());
+                    outputStream.flush();
+                    outputStream.close();
+                }
             } else if ("PUT".equals(exchange.getRequestMethod())){
-                //DI SINI PUT!
+                OutputStream outputStream = exchange.getResponseBody();
+                BufferedReader readers = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), "utf-8"));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = readers.readLine()) != null) {
+                    buffer.append(line);
+                }
+                readers.close();
+                String json = buffer.toString();
+                if(path.equals("users")){
+                    if(user.parsingJson(json) != 1){
+                        user.update(allPath[2]);
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("products")){
+                    if(product.parsingJson(json) != 1){
+                        product.update(allPath[2]);
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("orders")){
+                    if(order.parsingJson(json) != 1){
+                        order.update(allPath[2]);
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("order_details")){
+                    if(orderDetail.parsingJson(json) != 1){
+                        orderDetail.update(allPath[2]);
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("addresses")){
+                    if(address.parsingJson(json) != 1){
+                        address.update(allPath[2]);
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else if(path.equals("reviews")){
+                    if(review.parsingJson(json) != 1){
+                        review.update(allPath[2]);
+                        message = "Success";
+                        exchange.sendResponseHeaders(200, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }else{
+                        message = "400 BAD REQUEST";
+                        exchange.sendResponseHeaders(400, message.length());
+                        outputStream.write(message.getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                }else {
+                    message = "400 BAD REQUEST";
+                    exchange.sendResponseHeaders(400, message.length());
+                    outputStream.write(message.getBytes());
+                    outputStream.flush();
+                    outputStream.close();
+                }
             } else if ("DELETE".equals(exchange.getRequestMethod())){
                 OutputStream outputStream = exchange.getResponseBody();
                 SQLiteQuery tableValue = new SQLiteQuery();
@@ -171,7 +387,7 @@ public class Handler {
                 outputStream.flush();
                 outputStream.close();
             } else {
-                message = "Method is under development.\nCustomer service:\"\"";
+                message = "Method is under development.";
                 exchange.sendResponseHeaders(404, message.length());
                 mainOut.write(message.getBytes());
                 mainOut.flush();
