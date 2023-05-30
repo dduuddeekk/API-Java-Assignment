@@ -233,4 +233,35 @@ public class SQLiteQuery {
         String jsonSend = "{\n"+appendString(result)+"\n}";
         return jsonSend;
     }
+
+    public String selectTableUser(String id, String tableOne){
+        String sql = "SELECT * FROM users WHERE id = "+id;
+        String jsonSend = "";
+        System.out.println(id);
+        try{
+            Connection connection = this.connect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            Users user = new Users();
+            user.setUser(resultSet.getInt("userId"), resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("email"), resultSet.getString("phone_number"), resultSet.getString("type"));
+
+            if(tableOne.equals("addresses")){
+                jsonSend = selectIdUsers(tableOne, String.valueOf(user.id()));
+            }else if(tableOne.equals("products")){
+                jsonSend = selectId(tableOne, String.valueOf(user.id()));
+            }else if(tableOne.equals("orders")){
+                jsonSend = selectId(tableOne, String.valueOf(user.id()));
+            }else if(tableOne.equals("reviews")){
+                String sQLFind = "SELECT * FROM orders WHERE buyerId = "+id;
+                Connection connection1 = this.connect();
+                Statement statement1 = connection1.createStatement();
+                ResultSet resultSet1 = statement1.executeQuery(sQLFind);
+                Orders order = new Orders();
+                order.setOrders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid"));
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return jsonSend;
+    }
 }

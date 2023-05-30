@@ -103,6 +103,15 @@ class Products{
     private int price;
     private int stock;
 
+    public void setProducts(int id, int sellerId, String title, String description, int price, int stock){
+        this.id = id;
+        this.sellerId = sellerId;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+    }
+
     public int parsingJson(String jSon){
         try{
             JSONObject jsonObject = new JSONObject(jSon);
@@ -132,6 +141,16 @@ class Addresses{
     private String province;
     private String postcode;
 
+    public void setAddresses(int userId, String type, String lineOne, String lineTwo, String city, String province, String postcode){
+        this.userId = userId;
+        this.type = type;
+        this.lineOne = lineOne;
+        this.lineTwo = lineTwo;
+        this.city = city;
+        this.province = province;
+        this.postcode = postcode;
+    }
+
     public int parsingJson(String jSon){
         try{
             JSONObject jsonObject = new JSONObject(jSon);
@@ -159,6 +178,15 @@ class Orders{
     private int total;
     private int discount;
     private String is_paid;
+
+    public void setOrders(int id, int buyerId, String note, int total, int discount, String is_paid){
+        this.id = id;
+        this.buyerId = buyerId;
+        this.note = note;
+        this.total = total;
+        this.discount = discount;
+        this.is_paid = is_paid;
+    }
 
     public int parsingJson(String jSon){
         try{
