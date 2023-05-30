@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/HP/OneDrive/Documents/DUDEK MAIN JAVA/Belanja Daring/belanja.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="0"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="2248"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,9:mainaddresses"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">CREATE TABLE &quot;users&quot; (
+	&quot;userId&quot;	INTEGER,
+	&quot;first_name&quot;	VARCHAR(100),
+	&quot;last_name&quot;	VARCHAR(100),
+	&quot;email&quot;	VARCHAR(100),
+	&quot;phone_number&quot;	VARCHAR(15),
+	&quot;type&quot;	VARCHAR(10) CHECK(&quot;type&quot; IN ('seller', 'buyer')),
+	PRIMARY KEY(&quot;userId&quot; AUTOINCREMENT)
+);
+
+CREATE TABLE &quot;products&quot; (
+	&quot;productId&quot;	INTEGER,
+	&quot;sellerId&quot;	INTEGER,
+	&quot;title&quot;	VARCHAR(100),
+	&quot;description&quot;	TEXT,
+	&quot;price&quot;	INTEGER,
+	&quot;stock&quot;	INTEGER,
+	PRIMARY KEY(&quot;productId&quot;),
+	FOREIGN KEY(&quot;sellerId&quot;) REFERENCES &quot;users&quot;(&quot;userId&quot;)
+);
+
+CREATE TABLE &quot;orders&quot; (
+	&quot;orderId&quot;	INTEGER,
+	&quot;buyerId&quot;	INTEGER,
+	&quot;note&quot;	TEXT,
+	&quot;total&quot;	INTEGER,
+	&quot;discount&quot;	INTEGER,
+	&quot;is_paid&quot;	TEXT CHECK(&quot;is_paid&quot; IN (&quot;true&quot;, &quot;false&quot;)),
+	FOREIGN KEY(&quot;buyerId&quot;) REFERENCES &quot;users&quot;(&quot;userId&quot;),
+	PRIMARY KEY(&quot;orderId&quot;)
+);
+
+CREATE TABLE &quot;order_details&quot; (
+	&quot;orderId&quot;	INTEGER,
+	&quot;productId&quot;	INTEGER,
+	&quot;quantity&quot;	INTEGER,
+	&quot;price&quot;	INTEGER,
+	FOREIGN KEY(&quot;productId&quot;) REFERENCES &quot;products&quot;(&quot;productId&quot;),
+	FOREIGN KEY(&quot;orderId&quot;) REFERENCES &quot;orders&quot;(&quot;orderId&quot;)
+);
+
+CREATE TABLE &quot;addresses&quot; (
+	&quot;userId&quot;	INTEGER,
+	&quot;type&quot;	VARCHAR(20) CHECK(&quot;type&quot; IN ('home', 'office', 'school')),
+	&quot;line1&quot;	VARCHAR(255),
+	&quot;line2&quot;	VARCHAR(255),
+	&quot;city&quot;	VARCHAR(255),
+	&quot;province&quot;	VARCHAR(255),
+	&quot;postcode&quot;	VARCHAR(15),
+	FOREIGN KEY(&quot;userId&quot;) REFERENCES &quot;user&quot;(&quot;usersId&quot;)
+);
+
+CREATE TABLE &quot;reviews&quot; (
+	&quot;orderId&quot;	INTEGER,
+	&quot;star&quot;	INTEGER,
+	&quot;description&quot;	TEXT,
+	FOREIGN KEY(&quot;orderId&quot;) REFERENCES &quot;orders&quot;(&quot;orderId&quot;)
+);
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (1, 'John', 'Doe', 'johndoe@example.com', '1234567890', 'buyer');
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (2, 'Jane', 'Smith', 'janesmith@example.com', '9876543210', 'seller');
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (3, 'Michael', 'Johnson', 'michaeljohnson@example.com', '4567890123', 'buyer');
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (4, 'Emily', 'Brown', 'emilybrown@example.com', '7890123456', 'seller');
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (5, 'William', 'Miller', 'williammiller@example.com', '2345678901', 'seller');
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (6, 'Sophia', 'Wilson', 'sophiawilson@example.com', '0123456789', 'seller');
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (7, 'Daniel', 'Taylor', 'danieltaylor@example.com', '5678901234', 'buyer');
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (8, 'Olivia', 'Clark', 'oliviaclark@example.com', '9012345678', 'buyer');
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (9, 'James', 'Anderson', 'jamesanderson@example.com', '3456789012', 'seller');
+
+INSERT INTO &quot;users&quot; (&quot;userId&quot;, &quot;first_name&quot;, &quot;last_name&quot;, &quot;email&quot;, &quot;phone_number&quot;, &quot;type&quot;)
+VALUES (10, 'Ava', 'Walker', 'avawalker@example.com', '6789012345', 'buyer');
+</sql><current_tab id="0"/></tab_sql></sqlb_project>

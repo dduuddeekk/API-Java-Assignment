@@ -76,7 +76,7 @@ public class Handler {
                         } else if (query.length == 1) {
                             if (path.equals("users")) {
                                 message = tableValue.oneCondition(path, "userId", query[0]);
-                            } else if (path.equals("produts")) {
+                            } else if (path.equals("products")) {
                                 message = tableValue.oneCondition(path, "productId", query[0]);
                             } else if (path.equals("orders")) {
                                 message = tableValue.oneCondition(path, "orderId", query[0]);
@@ -105,6 +105,8 @@ public class Handler {
                         outputStream.flush();
                         outputStream.close();
                     } else {
+                        String allQuery = exchange.getRequestURI().getQuery();
+                        String[] query = Parsing.filter(allQuery);
                         if (path.equals("users")) {
                             if (allPath.length == 2) {
                                 message = tableValue.selectAll(path);

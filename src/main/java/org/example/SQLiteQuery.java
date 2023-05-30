@@ -9,7 +9,7 @@ public class SQLiteQuery {
     private Connection connect(){
         Connection connection = null;
         String rootPath = System.getProperty("user.dir");
-        String url = "jdbc:sqlite:" + rootPath + "dbBelanja.db";
+        String url = "jdbc:sqlite:" + rootPath + "/belanja.db";
         try{
             connection = DriverManager.getConnection(url);
             System.out.println("connection ok");
