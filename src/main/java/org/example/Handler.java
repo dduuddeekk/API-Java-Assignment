@@ -103,6 +103,25 @@ class Products{
     private int price;
     private int stock;
 
+    public Integer getId(){
+        return id;
+    }
+    public Integer getSellerId(){
+        return sellerId;
+    }
+    public String getTitle(){
+        return title;
+    }
+    public String getDescription(){
+        return description;
+    }
+    public Integer getPrice(){
+        return price;
+    }
+    public Integer getStock(){
+        return stock;
+    }
+
     public void setProducts(int id, int sellerId, String title, String description, int price, int stock){
         this.id = id;
         this.sellerId = sellerId;
@@ -140,6 +159,28 @@ class Addresses{
     private String city;
     private String province;
     private String postcode;
+
+    public Integer getUserId(){
+        return userId;
+    }
+    public String getType(){
+        return type;
+    }
+    public String getLineOne(){
+        return lineOne;
+    }
+    public String getLineTwo(){
+        return lineTwo;
+    }
+    public String getCity(){
+        return city;
+    }
+    public String getProvince(){
+        return province;
+    }
+    public String getPostcode(){
+        return postcode;
+    }
 
     public void setAddresses(int userId, String type, String lineOne, String lineTwo, String city, String province, String postcode){
         this.userId = userId;
@@ -179,6 +220,25 @@ class Orders{
     private int discount;
     private String is_paid;
 
+    public Integer getId(){
+        return id;
+    }
+    public Integer getBuyerId(){
+        return buyerId;
+    }
+    public String getNote(){
+        return note;
+    }
+    public Integer getTotal(){
+        return total;
+    }
+    public Integer getDiscount(){
+        return discount;
+    }
+    public String getIs_paid(){
+        return is_paid;
+    }
+
     public void setOrders(int id, int buyerId, String note, int total, int discount, String is_paid){
         this.id = id;
         this.buyerId = buyerId;
@@ -213,6 +273,19 @@ class OrderDetails{
     private int quantity;
     private int price;
 
+    public Integer getOrderId(){
+        return orderId;
+    }
+    public Integer getProductId(){
+        return productId;
+    }
+    public Integer getQuantity(){
+        return quantity;
+    }
+    public Integer getPrice(){
+        return price;
+    }
+
     public int parsingJson(String jSon){
         try{
             JSONObject jsonObject = new JSONObject(jSon);
@@ -234,6 +307,16 @@ class Reviews{
     private int orderId;
     private int star;
     private String description;
+
+    public Integer getOrderId(){
+        return orderId;
+    }
+    public Integer getStar(){
+        return star;
+    }
+    public String getDescription(){
+        return description;
+    }
 
     public int parsingJson(String jSon){
         try{

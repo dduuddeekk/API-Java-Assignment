@@ -258,6 +258,8 @@ public class SQLiteQuery {
                 ResultSet resultSet1 = statement1.executeQuery(sQLFind);
                 Orders order = new Orders();
                 order.setOrders(resultSet.getInt("orderId"), resultSet.getInt("buyerId"), resultSet.getString("note"), resultSet.getInt("total"), resultSet.getInt("discount"), resultSet.getString("is_paid"));
+
+                jsonSend = selectOrdersId(tableOne, String.valueOf(order.getId()));
             }
         }catch (SQLException e){
             System.out.println(e.getMessage());
