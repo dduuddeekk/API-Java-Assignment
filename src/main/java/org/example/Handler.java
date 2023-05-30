@@ -34,6 +34,8 @@ public class Handler {
             OrderDetails orderDetail = new OrderDetails();
             Reviews review = new Reviews();
             Dotenv dotenv = Dotenv.configure().filename(".env").load();
+            String apiKey = dotenv.get("API_KEY");
+            String requestApiKey = exchange.getRequestHeaders().getFirst("x-api-key");
 //            if(!APIAuto.apiAuthorization(exchange)){
 //                message = "400 BAD REQUEST";
 //                exchange.sendResponseHeaders(400, message.length());
@@ -42,7 +44,7 @@ public class Handler {
 //                mainOut.close();
 //                System.exit(0);
 //            }else {
-            if(dotenv.get("API_KEY").equals(exchange.getRequestHeaders().get("x-api-key").get(0))) {
+            if(apiKey != null && apiKey.equals(requestApiKey)) {
                 if ("GET".equals(exchange.getRequestMethod())) {
                     OutputStream outputStream = exchange.getResponseBody();
                     SQLiteQuery tableValue = new SQLiteQuery();
