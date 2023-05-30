@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.io.IOException;
+import java.util.logging.SocketHandler;
+
 public class Handler {
     public static class handler implements HttpHandler {
         @Override
@@ -20,6 +22,7 @@ public class Handler {
             String path = allPath[1];
             String message = "";
             System.out.println(exchange.getRequestMethod());
+            OutputStream mainOut = exchange.getResponseBody();
 
             if ("GET".equals(exchange.getRequestMethod())) {
                 OutputStream outputStream = exchange.getResponseBody();
@@ -146,13 +149,33 @@ public class Handler {
             } else if ("PUT".equals(exchange.getRequestMethod())){
                 //DI SINI PUT!
             } else if ("DELETE".equals(exchange.getRequestMethod())){
-                //DI SINI DELETE!
-            } else {
-                message = "Method not found.";
+                OutputStream outputStream = exchange.getResponseBody();
+                SQLiteQuery tableValue = new SQLiteQuery();
+
+                if(path.equals("users") || path.equals("addresses")){
+                    tableValue.deleteColumn(path, "userId", allPath[2]);
+                }else if(path.equals("products")){
+                    tableValue.deleteColumn(path, "productId", allPath[2]);
+                }else if(path.equals("orders") || path.equals("order_details") || path.equals("reviews")){
+                    tableValue.deleteColumn(path, "orderId", allPath[2]);
+                }else{
+                    message = "Path Not Found.";
+                    exchange.sendResponseHeaders(404, message.length());
+                    outputStream.write(message.getBytes());
+                    outputStream.flush();
+                    outputStream.close();
+                }
+                message = "Delete success.";
                 exchange.sendResponseHeaders(404, message.length());
-//                outputStream.write(message.getBytes());
-//                outputStream.flush();
-//                outputStream.close();
+                outputStream.write(message.getBytes());
+                outputStream.flush();
+                outputStream.close();
+            } else {
+                message = "Method is under development.\nCustomer service:\"\"";
+                exchange.sendResponseHeaders(404, message.length());
+                mainOut.write(message.getBytes());
+                mainOut.flush();
+                mainOut.close();
             }
         }
     }
