@@ -235,7 +235,7 @@ public class SQLiteQuery {
     }
 
     public String selectTableUser(String id, String tableOne){
-        String sql = "SELECT * FROM users WHERE id = "+id;
+        String sql = "SELECT * FROM users WHERE userId = "+id;
         String jsonSend = "";
         System.out.println(id);
         try{
@@ -274,5 +274,29 @@ public class SQLiteQuery {
             System.out.println(e.getMessage());
         }
         return jsonSend;
+    }
+
+    public void updateUser(int id, String firstName, String lastName, String email, String phoneNumber, String type, String newId){
+        String sql = "UPDATE users SET userId = "+id+", first_name = \""+firstName+"\", last_name = \""+lastName+"\", email = \""+email+"\", phone_number = \""+phoneNumber+
+                "\", type = \""+type+"\", WHERE userId = "+newId+";";
+        try{
+            Connection connection = this.connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateProducts(int id, String firstName, String lastName, String email, String phoneNumber, String type, String newId){
+        String sql = "UPDATE users SET userId = "+id+", first_name = \""+firstName+"\", last_name = \""+lastName+"\", email = \""+email+"\", phone_number = \""+phoneNumber+
+                "\", type = \""+type+"\", WHERE userId = "+newId+";";
+        try{
+            Connection connection = this.connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
     }
 }
